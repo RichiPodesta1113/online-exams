@@ -1,11 +1,37 @@
 name: Generate Documentation
-on: { workflow_dispatch: {} }
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "docs/**"
+      - ".github/workflows/generate-documentation.yml"
+  workflow_dispatch:
+
 jobs:
-  docs:
+  documentation:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Validate Mermaid documentation
-        run: test -f docs/er-diagram.md && test -f docs/class-diagram.md && test -f docs/component-diagram.md && test -f docs/deployment-diagram.md && test -f docs/data-dictionary.md
-      - uses: actions/upload-artifact@v4
-        with: { name: generated-documentation, path: docs/ }
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate documentation
+        run: |
+          test -f docs/data-dictionary.md
+          test -f docs/er-diagram.md
+          test -f docs/class-diagram.md
+          test -f docs/component-diagram.md
+          test -f docs/deployment-diagram.md
+
+      - name: Create documentation package
+        run: |
+          mkdir generated-documentation
+          cp docs/*.md generated-documentation/
+
+      - name: Upload documentation
+        uses: actions/upload-artifact@v4
+        with:
+          name: online-exams-documentation
+          path: generated-documentation/
