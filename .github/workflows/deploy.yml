@@ -1,0 +1,9 @@
+name: Deploy
+on: { workflow_dispatch: {} }
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t online-exams-api ./backend
+      - run: echo "Configura AZURE_CREDENTIALS/ACR y reemplaza este paso por el despliegue a tus recursos provisionados."

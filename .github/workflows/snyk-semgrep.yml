@@ -1,0 +1,19 @@
+name: Snyk Semgrep
+on: [push, pull_request]
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Semgrep
+        uses: semgrep/semgrep-action@v1
+      - name: Build image
+        run: docker build -t online-exams-api ./backend
+      - name: Snyk dependencies
+        uses: snyk/actions/dotnet@master
+        env: { SNYK_TOKEN: '${{ secrets.SNYK_TOKEN }}' }
+        with: { args: '--file=backend/src/OnlineExams.Api/OnlineExams.Api.csproj' }
+      - name: Snyk container
+        uses: snyk/actions/docker@master
+        env: { SNYK_TOKEN: '${{ secrets.SNYK_TOKEN }}' }
+        with: { image: online-exams-api }

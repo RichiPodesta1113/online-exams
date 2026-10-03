@@ -1,0 +1,3 @@
+import React,{useEffect,useState}from'react';import{createRoot}from'react-dom/client';import'./style.css';
+const API=import.meta.env.VITE_API_URL||'http://localhost:8080';
+function App(){const[e,setE]=useState<any[]>([]);useEffect(()=>{fetch(`${API}/api/exams`).then(r=>r.json()).then(setE).catch(()=>{})},[]);return <main><h1>Online Exams</h1><p>Panel de estudiante/docente</p><section><h2>Exámenes disponibles</h2>{e.length?e.map(x=><article key={x.id}><b>{x.title}</b><p>{x.description}</p><small>{x.durationMinutes} minutos</small></article>):<p>No hay exámenes todavía.</p>}</section></main>}createRoot(document.getElementById('root')!).render(<App/>);

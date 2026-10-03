@@ -1,0 +1,11 @@
+name: Sonar
+on: [push, pull_request]
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: '8.0.x' }
+      - run: dotnet build backend/src/OnlineExams.Api/OnlineExams.Api.csproj
+      # Configura SONAR_TOKEN y SONAR_PROJECT_KEY antes de activar el análisis SonarCloud.

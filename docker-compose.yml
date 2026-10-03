@@ -1,0 +1,18 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: online_exams
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports: ["5432:5432"]
+  api:
+    build: ./backend
+    environment:
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=online_exams;Username=postgres;Password=postgres
+    ports: ["8080:8080"]
+    depends_on: [db]
+  frontend:
+    build: ./frontend
+    ports: ["3000:80"]
+    depends_on: [api]

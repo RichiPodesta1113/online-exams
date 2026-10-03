@@ -1,0 +1,11 @@
+name: Generate Documentation
+on: { workflow_dispatch: {} }
+jobs:
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate Mermaid documentation
+        run: test -f docs/er-diagram.md && test -f docs/class-diagram.md && test -f docs/component-diagram.md && test -f docs/deployment-diagram.md && test -f docs/data-dictionary.md
+      - uses: actions/upload-artifact@v4
+        with: { name: generated-documentation, path: docs/ }
